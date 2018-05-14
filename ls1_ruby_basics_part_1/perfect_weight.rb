@@ -3,14 +3,12 @@
 # Если идеальный вес получается отрицательным, то выводится строка "Ваш вес уже оптимальный"
 
 # Идеальный вес
-puts ''
-puts 'Идеальный вес '
-puts ''
-print 'Введите свое имя:'
-name = gets.chomp
-print "#{name}, ведите свой рост:"
+puts 'Идеальный вес'
+print 'Введите свое имя: '
+name = gets.chomp.to_i
+print "#{name}, ведите свой рост: "
 growth = gets.chomp
-perfect_weight = growth.to_i - 110
+perfect_weight = growth - 110
 if perfect_weight > 0
   puts "#{name}, ваш идеальный вес равен #{perfect_weight}"
 else

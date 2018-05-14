@@ -11,11 +11,9 @@
 # вернет 4, т.е. квадратный корень из 16.
 
 # Квадратное уравнение
-puts
 puts 'Уравнение вида a*x^2 + b*x + c'
-puts
 print 'Введите значение a: '
-a = gets.chop.to_f
+a = gets.chomp.to_f
 print 'Введите значение b: '
 b = gets.chomp.to_f
 print 'Введите значение c: '
@@ -25,7 +23,6 @@ if dscrmt > 0
   puts "x1 = #{(-b + Math.sqrt(dscrmt)) / (2 * a)}, x2 = #{(-b - Math.sqrt(dscrmt)) / (2 * a)}"
 elsif dscrmt == 0
   puts "x1 = #{-b / 2 * a}"
-
 else
   puts 'Корней нет'
 end
