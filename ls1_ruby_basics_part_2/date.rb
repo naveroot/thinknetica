@@ -4,7 +4,7 @@ months_days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
 print  'Введите год: '
 year = gets.chomp.to_i
-if (year % 400).zero? || (year % 4).zero?
+if (year % 400).zero? || (year % 4).zero? && !(year % 100).zero?
   months_days[1] = 29
   puts 'Год високосный'
 else
@@ -23,7 +23,7 @@ until day.between?(1, months_days[month - 1])
   day = gets.chomp.to_i
 end
 day_count = if month > 1
-              months_days[0..month - 2].map { |days| days }.sum + day
+              months_days[0..month - 2].reduce(:+) + day
             else
               day
             end
