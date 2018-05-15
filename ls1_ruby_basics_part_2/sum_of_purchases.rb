@@ -21,7 +21,11 @@ loop do
   sum = cost * pieces
   basket[name] = { cost => pieces }
   final_price += sum
-  puts "Сумма:  #{sum}"
+  puts "Чек:"
+  basket.each do |key,value|
+    arr = value.to_a
+    p "Наименование: #{key} Колличество: #{arr[0].last} Цена: #{arr[0].first} Итого: #{arr[0].last * arr[0].first}"
+  end
   puts "Хэш: #{basket}"
   puts "Всего: #{final_price}"
 end
