@@ -22,10 +22,5 @@ until day.between?(1, months_days[month - 1])
   print 'Введите день: '
   day = gets.chomp.to_i
 end
-day_count = if month > 1
-              months_days[0..month - 2].reduce(:+) + day
-            else
-              day
-            end
-
+day_count = month > 1 ? months_days[0..month - 2].reduce(:+) + day : day
 puts "Количество дней от начала года #{day_count}"
