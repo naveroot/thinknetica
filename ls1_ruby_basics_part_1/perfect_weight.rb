@@ -5,9 +5,9 @@
 # Идеальный вес
 puts 'Идеальный вес'
 print 'Введите свое имя: '
-name = gets.chomp.to_i
+name = gets.chomp
 print "#{name}, ведите свой рост: "
-growth = gets.chomp
+growth = gets.chomp.to_i
 perfect_weight = growth - 110
 if perfect_weight > 0
   puts "#{name}, ваш идеальный вес равен #{perfect_weight}"
