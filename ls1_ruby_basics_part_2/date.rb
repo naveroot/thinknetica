@@ -6,9 +6,9 @@ print  'Введите год: '
 year = gets.chomp.to_i
 if (year % 400).zero? || (year % 4).zero?
   months_days[1] = 29
-  puts 'Год високостный'
+  puts 'Год високосный'
 else
-  puts 'Год НЕ високостный'
+  puts 'Год НЕ високосный'
 end
 
 month = 0
