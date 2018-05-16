@@ -17,7 +17,8 @@ class RailwayStation
   end
 
   def defaults
-    { name: "Station_#{@@station_counter}" }
+    @@station_counter += 1
+    { name: "Station_#{@@station_counter}", near_stations: [] }
   end
 
   def add_train(train)
@@ -36,5 +37,9 @@ class RailwayStation
     @trains.each_with_index do |index, train|
       puts "#{index}. Тип: #{train.type} Колличество вагонов: #{train.wagons}"
     end
+  end
+
+  def add_near_station(name)
+    @near_stations << name
   end
 end

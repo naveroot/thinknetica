@@ -4,9 +4,12 @@
 # Может выводить список всех станций по-порядку от начальной до конечной
 
 class Route
+  attr_accessor :stations
   def initialize
     @stations = []
   end
 
-
+  def add_station(station)
+    @stations << station
+  end
 end
