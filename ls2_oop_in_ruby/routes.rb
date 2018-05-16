@@ -3,6 +3,9 @@ class Routes
     @routes = []
   end
 
+  def add_route(route)
+    @routes << route
+  end
   def make_route(railway_stations)
     @railway_stations = railway_stations
     @route = Route.new
@@ -20,7 +23,26 @@ class Routes
     end
   end
 
-  private
+
+  def change_route
+    puts 'Выберите маршрут'
+    show_routes
+    route_id = gets.chomp.to_i
+    puts "Выберите действие:"
+    puts "0. Удалить станцию из маршрута"
+    puts "1. Добавить станцию в маршрут"
+    choice = gets.chomp.to_i
+    case choice
+    when 0
+      @routes[route_id].delete_station
+    when 1
+      @route = @routes[route_id]
+      select_next_stations
+      route_created
+    end
+  end
+
+    private
 
   def select_first_station
     puts 'Выберите начальную станцию маршрута (номер):'

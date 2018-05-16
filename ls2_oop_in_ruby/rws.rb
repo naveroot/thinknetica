@@ -10,7 +10,8 @@ routes = Routes.new
 railway_stations.add_station(RailwayStation.new(name: 'Moscow', near_stations: ['SPB']))
 railway_stations.add_station(RailwayStation.new(name: 'SPB', near_stations: ['Moscow', 'EKB']))
 railway_stations.add_station(RailwayStation.new(name: 'EKB', near_stations: ['SPB']))
-
+routes.add_route(Route.new(['Moscow','SPB']))
+routes.add_route(Route.new(['Moscow','SPB', 'EKB']))
 loop do
   puts 'rws'
   puts 'menu'
@@ -19,7 +20,8 @@ loop do
   puts '2. show stations'
   puts '3. create routes'
   puts '4. show routes'
-  puts '5. exit'
+  puts '5. change route'
+  puts '9. exit'
   puts '======================'
   choice = gets.chomp.to_i
 
@@ -41,6 +43,8 @@ loop do
     puts 'press any key...'
     gets
   when 5
+    routes.change_route
+  when 9
     break
   end
 end
