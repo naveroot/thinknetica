@@ -7,8 +7,7 @@
 # содержащий цену за единицу товара и кол-во купленного товара. Также вывести итоговую сумму за каждый товар.
 #
 # Вычислить и вывести на экран итоговую сумму всех покупок в "корзине".
-
-basket = []
+basket = {}
 final_price = 0
 loop do
   print 'Введите название товара (введите стоп для выхода): '
@@ -19,21 +18,18 @@ loop do
   print 'Введите количество товара: '
   amount = gets.chomp.to_f
   sum = price * amount
-  order = { name: name, params: { price: price, amount: amount, total_price: sum }}
-  basket << order
+  basket[name.to_sym] = { price: price, amount: amount }
   final_price += sum
-
   puts "Чек:"
   puts "================================="
-  basket.each_with_index do |order, index|
-    puts " #{index + 1}. Наименование: #{order[:name]}"
-    puts "    Колличество: #{order[:params][:amount]}"
-    puts "    Цена: #{order[:params][:price]}"
-    puts "    Итого: #{order[:params][:total_price]}"
+  basket.each do |name, params|
+    puts "    Наименование: #{name}"
+    puts "    Колличество: #{params[:amount]}"
+    puts "    Цена: #{params[:price]}"
+    puts "    Итого: #{params[:amount] * params[:price]}"
   end
   puts "================================="
   puts "Всего: #{final_price}"
   puts "================================="
   puts "Хэш: #{basket}"
-
 end
