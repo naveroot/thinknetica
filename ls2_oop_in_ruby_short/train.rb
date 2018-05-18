@@ -39,7 +39,7 @@ class Train
     else
       remove_from_current_station
       @current_station_id += 1
-      puts "Едем в #{@route.stations[@current_station_id]}"
+      puts "Едем в #{@route.stations[@current_station_id].name}"
       add_to_current_station
     end
   end
@@ -50,7 +50,7 @@ class Train
     else
       remove_from_current_station
       @current_station_id -= 1
-      puts "Едем в #{@route.stations[@current_station_id]}"
+      puts "Едем в #{@route.stations[@current_station_id].name}"
       add_to_current_station
     end
   end
@@ -90,7 +90,7 @@ class Train
     @type == 'CARGO'
   end
 
-  private #Используется только внутри класса\
+  private #Используется только внутри класса
 
   def add_to_current_station
     @route.stations[@current_station_id].add_train(self)

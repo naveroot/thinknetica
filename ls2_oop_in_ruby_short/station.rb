@@ -25,9 +25,6 @@ class Station
   end
 
   def remove_train(train)
-    @trains.each {|train| puts train}
-    puts '------------'
-    puts train
     @trains.delete(train)
   end
 
