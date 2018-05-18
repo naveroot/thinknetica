@@ -5,18 +5,11 @@
 # Может отправлять поезда (по одному за раз, при этом, поезд удаляется из списка поездов, находящихся на станции).
 class Station
   @@station_counter = 0
-  attr_reader :name
-  attr_accessor :trains, :near_stations
+  attr_accessor :trains, :name
 
-  def initialize(args = {})
-    args = defaults.merge(args)
-    @name = args[:name]
+  def initialize(name)
+    @name = name
     @trains = []
-  end
-
-  def defaults
-    @@station_counter += 1
-    { name: "Station_#{@@station_counter}" }
   end
 
   def add_train(train)
@@ -32,10 +25,14 @@ class Station
   end
 
   def show_trains
-    @trains.each_with_index do |train, index|
-      puts "#{index} | Номер: #{train.number}"
-      puts "  | Тип: #{train.type}"
-      puts "  | Колличество вагонов: #{train.wagons}"
+    if @trains.empty?
+      p "There are no trains"
+    else
+      @trains.each_with_index do |train, index|
+        puts "#{index} | Номер: #{train.number}"
+        puts "  | Тип: #{train.type}"
+        puts "  | Колличество вагонов: #{train.wagons}"
+      end
     end
   end
 

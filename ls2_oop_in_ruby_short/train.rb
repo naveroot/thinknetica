@@ -15,22 +15,12 @@ class Train
   @@number_counter = 0
   attr_reader :wagons, :speed, :type, :number
 
-  def initialize(args = {})
-    args = args.merge(defaults)
-    @type = args[:type]
-    @wagons = args[:wagons]
-    @number = args[:number]
-    @route = args[:route]
+  def initialize(type, wagons, number, route)
+    @type = type
+    @wagons = wagons
+    @number = number
+    add_route(route)
     @speed = 0
-    @current_station_id = 0
-  end
-
-  def defaults
-    @@number_counter += 1
-    { type:   WAGON_TYPE[rand(1)],
-      wagons: rand(10),
-      number: "number_#{@@number_counter}",
-      route:  Route.new }
   end
 
   def speed_up
@@ -52,15 +42,15 @@ class Train
   end
 
   def current_station
-    puts "Поезд на станции: #{@route.full_route[@current_station_id]}"
+    @route.stations[@current_station_id].name
   end
 
   def go_next_station
-    if @current_station_id >= @route.full_route.size - 1
+    if @current_station_id >= @route.stations.size - 1
       puts 'Конечная станция. Конец маршрута.'
     else
       @current_station_id += 1
-      puts "Едем в #{@route.full_route[@current_station_id]}"
+      puts "Едем в #{@route.stations[@current_station_id]}"
     end
   end
 
@@ -69,15 +59,15 @@ class Train
       puts 'Конечная станция. Конец маршрута.'
     else
       @current_station_id -= 1
-      puts "Едем в #{@route.full_route[@current_station_id]}"
+      puts "Едем в #{@route.stations[@current_station_id]}"
     end
   end
 
   def near_stations
-    near_stations = []
-    near_stations << @route.full_route[@current_station_id - 1] if @current_station_id > 0
-    near_stations << @route.full_route[@current_station_id]
-    near_stations << @route.full_route[@current_station_id + 1] if @current_station_id >= @route.stations.size - 1
+    near_stations = {}
+    near_stations[:previous_station] = @route.stations[@current_station_id - 1] if @current_station_id > 0
+    near_stations[:next_station] = @route.stations[@current_station_id + 1] if @current_station_id >= @route.stations.size - 1
+    return near_stations
   end
 
   def add_wagon

@@ -3,43 +3,33 @@
 # Может удалять станцию из списка
 # Может выводить список всех станций по-порядку от начальной до конечной
 class Route
-  attr_accessor :stations, :last_station, :first_station,
-                :full_route
-  def initialize(args = {})
-    args = defaults.merge(args)
-    @first_station = args[:first_station]
-    @last_station = args[:last_station]
-    @stations = []
-    @full_route = []
-    add_to_full
-  end
+  attr_accessor :stations
 
-  def defaults
-    {first_station: 'MSK', last_station: 'SPB' }
+  def initialize(first_station, last_station)
+    @stations = [first_station, last_station]
   end
 
   def add_station(station)
-    @stations << station
-    add_to_full
+    @stations.insert(-2, station)
   end
 
   def remove_station
-    puts 'Выберите станцию для удаления:'
-    @stations.each_with_index { |station, index| puts "#{index}| #{station}"}
-    station_id = gets.chomp.to_i
-    @stations.delete_at(station_id)
-    puts "Станция удалена"
+    if @stations.size < 3
+      puts 'no middle stations'
+    else
+      puts 'Выберите станцию для удаления:'
+      middle_station_list
+      station_id = gets.chomp.to_i
+      @stations.delete_at(station_id + 1)
+      puts 'Станция удалена'
+    end
   end
 
-  def station_list
-    puts @first_station
-    @stations.each { |station| puts station }
-    puts @last_station
+  def middle_station_list
+    @stations[1...@stations.size - 1].each_with_index { |station, index| puts "[#{index}] #{station.name}" }
   end
 
-  private
-
-  def add_to_full
-    @full_route = [@first_station, *@stations, @last_station]
+  def all_station_list
+    @stations.each_with_index { |station, index| puts "[#{index}] #{station.name}" }
   end
 end
