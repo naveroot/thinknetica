@@ -4,7 +4,7 @@
 # Может показывать список поездов на станции по типу (см. ниже): кол-во грузовых, пассажирских
 # Может отправлять поезда (при этом, поезд удаляется из списка поездов, находящихся на станции).
 
-class RailwayStation
+class Station
   @@station_counter = 0
   attr_reader :name
   attr_accessor :trains, :near_stations

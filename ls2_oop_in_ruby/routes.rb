@@ -34,7 +34,7 @@ class Routes
     choice = gets.chomp.to_i
     case choice
     when 0
-      @routes[route_id].delete_station
+      @routes[route_id].remove_station
     when 1
       @route = @routes[route_id]
       select_next_stations

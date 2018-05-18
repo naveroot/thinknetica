@@ -7,9 +7,9 @@ require_relative 'routes'
 railway_stations = RailwayStations.new
 routes = Routes.new
 
-railway_stations.add_station(RailwayStation.new(name: 'Moscow', near_stations: ['SPB']))
-railway_stations.add_station(RailwayStation.new(name: 'SPB', near_stations: ['Moscow', 'EKB']))
-railway_stations.add_station(RailwayStation.new(name: 'EKB', near_stations: ['SPB']))
+railway_stations.add_station(Station.new(name: 'Moscow', near_stations: ['SPB']))
+railway_stations.add_station(Station.new(name: 'SPB', near_stations: ['Moscow', 'EKB']))
+railway_stations.add_station(Station.new(name: 'EKB', near_stations: ['SPB']))
 routes.add_route(Route.new(['Moscow','SPB']))
 routes.add_route(Route.new(['Moscow','SPB', 'EKB']))
 loop do

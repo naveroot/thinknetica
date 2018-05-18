@@ -20,8 +20,8 @@ class RailwayStations
         @railway_stations[index].add_near_station(name)
       end
     end
-    @railway_stations << RailwayStation.new(name: name,
-                                            near_stations: names_array)
+    @railway_stations << Station.new(name: name,
+                                     near_stations: names_array)
   end
 
   def add_station(station)

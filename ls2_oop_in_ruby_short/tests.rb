@@ -94,6 +94,8 @@ class LessonOOP
                        end
         puts 'Предыдущая станция:' + previous_station.to_s
         puts 'Следующая станция:' + next_station.to_s
+      when 10
+        break
       end
     end
   end
