@@ -16,12 +16,19 @@ class Station
     @trains << train
   end
 
-  def remove_train
+  def show_remove_train
     puts 'Выберите индекс поезда, который хотите удалить: '
     show_trains
     number = gets.chomp.to_i
     @trains.delete_at(number)
     puts 'Поезд удален'
+  end
+
+  def remove_train(train)
+    @trains.each {|train| puts train}
+    puts '------------'
+    puts train
+    @trains.delete(train)
   end
 
   def show_trains

@@ -1,20 +1,37 @@
-require_relative '../ls2_oop_in_ruby_short/route'
-require_relative '../ls2_oop_in_ruby_short/station'
-require_relative '../ls2_oop_in_ruby_short/train'
+require_relative 'route'
+require_relative 'station'
+require_relative 'train'
+require_relative 'wagon'
+require_relative 'cargo_train'
+require_relative 'cargo_wagon'
+require_relative 'passenger_train'
+require_relative 'passenger_wagon'
 
 class LessonOOP
-  WAGON_TYPE = %w[CARGO PASSENGER].freeze
+  WAGON_TYPE = [CargoTrain, PassengerTrain].freeze  # так делать можно?
 
   def initialize
     @stations = []
     @routes = []
     @trains = []
+  end
+
+  def start
+    seed
+    main_menu
+  end
+
+  private #не должнобыть доступно извне
+
+  def seed
     @stations << Station.new('Moscow')
     @stations << Station.new('SPB')
     @stations << Station.new('Novgorod')
     @stations << Station.new('Tallin')
     @routes   << Route.new(@stations[0], @stations[1])
-    @trains   << Train.new('CARGO', 9, '#12383490', @routes[0])
+    @routes   << Route.new(@stations[1], @stations[2])
+    @trains   << CargoTrain.new('0123123', @routes[0])
+    @trains   << PassengerTrain.new('3456785', @routes[0])
   end
 
   def station_list
@@ -26,7 +43,7 @@ class LessonOOP
 
   def trains_list
     puts 'Список всех поездов: '
-    @trains.each_with_index { |train, index| puts "[#{index}] #{train.number} #{train.type} #{train.wagons}" }
+    @trains.each_with_index { |train, index| puts "[#{index}] #{train.type} #{train.number} #{train.wagons.size}" }
     puts 'Выберите поезд:'
     @train_select_id = gets.chomp.to_i
   end
@@ -38,16 +55,23 @@ class LessonOOP
     @route_select_id = gets.chomp.to_i
   end
 
-  def start
-    stations_test
-    route_test
-    train_test
+
+  def main_menu
+    loop do
+      case main_menu_choice
+      when 1
+        stations_menu
+      when 2
+        route_menu
+      when 3
+        train_menu
+      when 9
+        break
+      end
+    end
   end
 
-  def train_test
-    puts '========================'
-    puts 'Train tests...'
-    puts '========================'
+  def train_menu
     trains_list
     loop do
       case trains_menu_choice
@@ -56,13 +80,13 @@ class LessonOOP
         number = gets.chomp
         puts 'Выберите тип поезда:'
         WAGON_TYPE.each_with_index {|type, index | puts "[#{index}] #{type}"}
-        type = WAGON_TYPE[gets.chomp.to_i]
-        puts 'Введите колличество вагонов:'
-        wagons = gets.chomp.to_i
+        train_type = WAGON_TYPE[gets.chomp.to_i]
+        # puts 'Введите колличество вагонов:'
+        # wagons = gets.chomp.to_i
         puts 'Введите маршрут для поезда:'
         routes_list
         route = @routes[@route_select_id]
-        @trains << Train.new(type, wagons, number, route)
+        @trains << train_type.new(number, route)
         puts 'Поезд успешно добавлен'
         trains_list
       when 2
@@ -70,7 +94,9 @@ class LessonOOP
       when 3
         @trains[@train_select_id].stop
       when 4
-        @trains[@train_select_id].add_wagon
+        # А вот почему тут в ТЗ нужно именно в параметре. Тут же как-раз
+        # утиная типизация может быть? у обоих классов есть метод, в них и разделить?
+        @trains[@train_select_id].add_wagon(@trains[@train_select_id].cargo? ? CargoWagon.new : PassengerWagon.new)
       when 5
         @trains[@train_select_id].remove_wagon
       when 6
@@ -100,10 +126,7 @@ class LessonOOP
     end
   end
 
-  def route_test
-    puts '========================'
-    puts 'Route tests...'
-    puts '========================'
+  def route_menu
     routes_list
     loop do
       case routes_menu_choice
@@ -131,10 +154,7 @@ class LessonOOP
     end
   end
 
-  def stations_test
-    puts '======================== '
-    puts 'Station tests...'
-    puts '======================== '
+  def stations_menu
     station_list
     loop do
       case stations_menu_choice
@@ -155,7 +175,7 @@ class LessonOOP
         @stations[@station_select_id].show_train_types
         p '======================== '
       when 5
-        @stations[@station_select_id].remove_train
+        @stations[@station_select_id].show_remove_train
       when 6
         station_list
       when 9
@@ -164,8 +184,24 @@ class LessonOOP
     end
   end
 
+  def main_menu_choice
+    puts '========================'
+    puts 'Главное меню'
+    puts '========================'
+    puts '1. Управление станциями'
+    puts '2. Управление маршрутами'
+    puts '3. Управление поездами'
+    puts '9. Для выхода'
+    puts 'Выберите действие: '
+    gets.chomp.to_i
+  end
+
   def stations_menu_choice
+    puts '======================== '
+    puts 'Меню управления станциями'
+    puts '======================== '
     puts 'Выбраная станция: ' + @stations[@station_select_id].name.to_s
+    puts 'Число поездов на станции: ' + @stations[@station_select_id].trains.size.to_s
     puts 'Выберите действие: '
     puts '1. Создать станцию '
     puts '2. Добавить поезд на станцию '
@@ -173,11 +209,14 @@ class LessonOOP
     puts '4. Колличество поездов на станции по типу'
     puts '5. Удалить поезд со станции'
     puts '6. Выбрать другую станцию'
-    puts '9. Переход к тестированию маршрутов'
+    puts '9. Выход в главное меню'
     gets.chomp.to_i
   end
 
   def routes_menu_choice
+    puts '========================'
+    puts 'Меню управления маршрутами'
+    puts '========================'
     puts 'Выбраный маршрут: ' +
          @routes[@route_select_id].stations.first.name +
          ' - ' +
@@ -187,17 +226,20 @@ class LessonOOP
     puts '2. Добавить  промежуточную станцию '
     puts '3. Удалить промежуточную станцию '
     puts '4. Показать полный маршрут'
-    puts '9. Переход к тестированию поездов'
+    puts '9. Выход в главное меню'
     gets.chomp.to_i
   end
 
   def trains_menu_choice
+    puts '========================'
+    puts 'Меню управления поездами'
+    puts '========================'
     puts 'Выбраный поезд:'
     puts '========================='
     puts 'номер: ' + @trains[@train_select_id].number.to_s
     puts 'скорость: ' + @trains[@train_select_id].speed.to_s
     puts 'текущая станция: ' + @trains[@train_select_id].current_station.to_s
-    puts 'число вагонов: ' + @trains[@train_select_id].wagons.to_s
+    puts 'число вагонов: ' + @trains[@train_select_id].wagons.size.to_s
     puts '========================='
     puts 'Выберите действие: '
     puts '1. Создать поезд'
@@ -209,7 +251,7 @@ class LessonOOP
     puts '7. Ехать к следующей станции'
     puts '8. Ехать к предыдущей станции'
     puts '9. Посмотреть соседние станции'
-    puts '10. Выход'
+    puts '10.Выход в главное меню'
     gets.chomp.to_i
   end
 end

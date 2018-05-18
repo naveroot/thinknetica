@@ -1,26 +1,14 @@
-# Имеет номер (произвольная строка) и тип (грузовой, пассажирский) и количество вагонов,
-# эти данные указываются при создании экземпляра класса
-# Может набирать скорость
-# Может возвращать текущую скорость
-# Может тормозить (сбрасывать скорость до нуля)
-# Может возвращать количество вагонов
-# Может прицеплять/отцеплять вагоны (по одному вагону за операцию, метод просто увеличивает или уменьшает количество вагонов).
-# Прицепка/отцепка вагонов может осуществляться только если поезд не движется.
-# Может принимать маршрут следования (объект класса Route).
-# При назначении маршрута поезду, поезд автоматически помещается на первую станцию в маршруте.
-# Может перемещаться между станциями, указанными в маршруте. Перемещение возможно вперед и назад, но только на 1 станцию за раз.
-# Возвращать предыдущую станцию, текущую, следующую, на основе маршрута
 class Train
   WAGON_TYPE = %w[CARGO PASSENGER].freeze
-  @@number_counter = 0
   attr_reader :wagons, :speed, :type, :number
 
-  def initialize(type, wagons, number, route)
+  def initialize(number, route, type)
     @type = type
-    @wagons = wagons
+    @wagons = []
     @number = number
     add_route(route)
     @speed = 0
+    add_to_current_station #уведомляем станцию о том что поезд на ней
   end
 
   def speed_up
@@ -38,7 +26,7 @@ class Train
   end
 
   def current_wagons
-    puts "Колличество вагонов: #{@wagons}"
+    puts "Колличество вагонов: #{@wagons.size}"
   end
 
   def current_station
@@ -49,8 +37,10 @@ class Train
     if @current_station_id >= @route.stations.size - 1
       puts 'Конечная станция. Конец маршрута.'
     else
+      remove_from_current_station
       @current_station_id += 1
       puts "Едем в #{@route.stations[@current_station_id]}"
+      add_to_current_station
     end
   end
 
@@ -58,8 +48,10 @@ class Train
     if @current_station_id.zero?
       puts 'Конечная станция. Конец маршрута.'
     else
+      remove_from_current_station
       @current_station_id -= 1
       puts "Едем в #{@route.stations[@current_station_id]}"
+      add_to_current_station
     end
   end
 
@@ -70,9 +62,15 @@ class Train
     return near_stations
   end
 
-  def add_wagon
+
+  def add_route(route)
+    @current_station_id = 0
+    @route = route
+  end
+
+  def add_wagon(wagon)
     if stop?
-      @wagons += 1
+      @wagons << wagon
       current_wagons
     else
       puts 'Цеплять или отцеплять вагоны можно только при полной остановке'
@@ -81,19 +79,26 @@ class Train
 
   def remove_wagon
     if stop?
-      @wagons -= 1
+      @wagons = @wagons.delete_at(-1)
       current_wagons
     else
       puts 'Цеплять или отцеплять вагоны можно только при полной остановке'
     end
   end
 
-  def add_route(route)
-    @current_station_id = 0
-    @route = route
+  def cargo?
+    @type == 'CARGO'
   end
 
-  private
+  private #Используется только внутри класса\
+
+  def add_to_current_station
+    @route.stations[@current_station_id].add_train(self)
+  end
+
+  def remove_from_current_station
+    @route.stations[@current_station_id].remove_train(self)
+  end
 
   def stop?
     @speed.zero?
