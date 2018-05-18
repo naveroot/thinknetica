@@ -17,7 +17,7 @@ class LessonOOP
   end
 
   def start
-    #seed
+    seed
     main_menu
   end
 

@@ -64,8 +64,10 @@ class Train
 
 
   def add_route(route)
+    remove_from_current_station unless @route.nil?
     @current_station_id = 0
     @route = route
+    add_to_current_station
   end
 
   def add_wagon(wagon)
