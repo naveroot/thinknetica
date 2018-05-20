@@ -34,8 +34,8 @@ class Station
     else
       @trains.each_with_index do |train, index|
         puts "#{index} | Номер: #{train.number}"
-        puts "  | Тип: #{train.type}"
-        puts "  | Колличество вагонов: #{train.wagons}"
+        puts "  | Тип: #{train.class}"
+        puts "  | Колличество вагонов: #{train.wagons.size}"
       end
     end
   end
@@ -44,7 +44,7 @@ class Station
     @cargo_trains_counter = 0
     @passenger_train_counter = 0
     @trains.each do |train|
-      if train.type == 'CARGO'
+      if train.class == CargoTrain
         @cargo_trains_counter += 1
       else
         @passenger_train_counter += 1

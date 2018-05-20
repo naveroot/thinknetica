@@ -1,14 +1,12 @@
 class Train
   WAGON_TYPE = %w[CARGO PASSENGER].freeze
-  attr_reader :wagons, :speed, :type, :number
+  attr_reader :wagons, :speed, :route, :number
 
-  def initialize(number, route, type)
-    @type = type
+  def initialize(number)
     @wagons = []
     @number = number
-    add_route(route)
     @speed = 0
-    add_to_current_station #уведомляем станцию о том что поезд на ней
+    @route = nil
   end
 
   def speed_up
@@ -86,10 +84,6 @@ class Train
     else
       puts 'Цеплять или отцеплять вагоны можно только при полной остановке'
     end
-  end
-
-  def cargo?
-    @type == 'CARGO'
   end
 
   private #Используется только внутри класса
