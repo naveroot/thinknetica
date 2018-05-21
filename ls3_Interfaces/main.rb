@@ -60,7 +60,6 @@ class LessonOOP
         routes_list
         @trains[@train_select_id].add_route(@routes[@route_select_id])
       when 7
-        raise
         @trains[@train_select_id].go_next_station
       when 8
         @trains[@train_select_id].go_previous_station

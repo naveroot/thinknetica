@@ -32,6 +32,7 @@ class Train
   end
 
   def go_next_station
+    raise if @route.nil?
     if @current_station_id >= @route.stations.size - 1
       puts 'Конечная станция. Конец маршрута.'
     else
@@ -40,9 +41,12 @@ class Train
       puts "Едем в #{@route.stations[@current_station_id].name}"
       add_to_current_station
     end
+  rescue
+    puts 'Сначала выберите маршрут'
   end
 
   def go_previous_station
+    raise if @route.nil?
     if @current_station_id.zero?
       puts 'Конечная станция. Конец маршрута.'
     else
@@ -51,13 +55,18 @@ class Train
       puts "Едем в #{@route.stations[@current_station_id].name}"
       add_to_current_station
     end
+  rescue
+    puts 'Сначала выберите маршрут'
   end
 
   def near_stations
+    raise if @route.nil?
     near_stations = {}
     near_stations[:previous_station] = @route.stations[@current_station_id - 1] if @current_station_id > 0
     near_stations[:next_station] = @route.stations[@current_station_id + 1] if @current_station_id >= @route.stations.size - 1
     return near_stations
+  rescue
+    puts 'Сначала выберите маршрут'
   end
 
 

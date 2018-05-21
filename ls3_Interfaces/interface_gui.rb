@@ -180,6 +180,7 @@ module InterfaceGUI
   end
 
   def train_near_stations(near_stations)
+    raise if @trains[@train_select_id].route.nil?
     previous_station = if near_stations[:previous_station].nil?
                          'Поезд на конечной станции'
                        else
@@ -192,6 +193,8 @@ module InterfaceGUI
                    end
     puts 'Предыдущая станция:' + previous_station.to_s
     puts 'Следующая станция:' + next_station.to_s
+  rescue
+    puts 'Сначала выберите маршрут'
   end
 
   def new_station
