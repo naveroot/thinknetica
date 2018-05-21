@@ -53,7 +53,7 @@ class LessonOOP
       when 3
         @trains[@train_select_id].stop
       when 4
-        @trains[@train_select_id].add_wagon(@trains[@train_select_id].cargo? ? CargoWagon.new : PassengerWagon.new)
+        @trains[@train_select_id].add_wagon(@trains[@train_select_id].is_a?(CargoTrain) ? CargoWagon.new : PassengerWagon.new)
       when 5
         @trains[@train_select_id].remove_wagon
       when 6
