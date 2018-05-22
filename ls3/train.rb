@@ -1,5 +1,4 @@
 class Train
-  WAGON_TYPE = %w[CARGO PASSENGER].freeze
   attr_reader :wagons, :speed, :route, :number
 
   def initialize(number)
@@ -79,7 +78,7 @@ class Train
 
   def add_wagon(wagon)
     if stop?
-      @wagons << wagon
+      COMPARABLE_WAGONS_TYPES.include?(wagon.class) ? @wagons << wagon : 'Неверный тип вагона'
       current_wagons
     else
       puts 'Цеплять или отцеплять вагоны можно только при полной остановке'
@@ -95,7 +94,7 @@ class Train
     end
   end
 
-  private #Используется только внутри класса
+  private # Используется только внутри класса
 
   def add_to_current_station
     @route.stations[@current_station_id].add_train(self)

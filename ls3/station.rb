@@ -4,7 +4,6 @@
 # Может возвращать список поездов на станции по типу (см. ниже): кол-во грузовых, пассажирских
 # Может отправлять поезда (по одному за раз, при этом, поезд удаляется из списка поездов, находящихся на станции).
 class Station
-  @@station_counter = 0
   attr_accessor :trains, :name
 
   def initialize(name)
@@ -17,11 +16,15 @@ class Station
   end
 
   def show_remove_train
-    puts 'Выберите индекс поезда, который хотите удалить: '
-    show_trains
-    number = gets.chomp.to_i
-    @trains.delete_at(number)
-    puts 'Поезд удален'
+    if @trains.empty?
+      puts 'На станции нет поездов'
+    else
+      puts 'Выберите индекс поезда, который хотите удалить: '
+      show_trains
+      number = gets.chomp.to_i
+      @trains.delete_at(number)
+      puts 'Поезд удален'
+      end
   end
 
   def remove_train(train)

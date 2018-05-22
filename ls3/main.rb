@@ -46,8 +46,7 @@ class LessonOOP
     loop do
       case trains_menu_choice
       when 1
-        @trains << TrainFactory.build(new_train)
-        trains_list
+        new_train
       when 2
         @trains[@train_select_id].speed_up
       when 3
@@ -79,7 +78,6 @@ class LessonOOP
       case routes_menu_choice
       when 1
         new_route
-        routes_list
       when 2
         puts 'Выберите станцию для добавления:'
         station_list
@@ -103,7 +101,6 @@ class LessonOOP
       case stations_menu_choice
       when 1
         new_station
-        station_list
       when 2
         trains_list
         @stations[@station_select_id].add_train(@trains[@train_select_id])
