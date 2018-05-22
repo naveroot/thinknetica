@@ -63,7 +63,7 @@ class LessonOOP
       when 8
         @trains[@train_select_id].go_previous_station
       when 9
-        train_near_stations(@trains[@train_select_id].near_stations)
+        @trains[@train_select_id].near_stations
       when 10
         break
       else

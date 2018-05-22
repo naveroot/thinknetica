@@ -154,7 +154,7 @@ module InterfaceGUI
     puts '==========================='
     loop do
       puts 'Введите номер поезда:'
-      @number = gets.chomp.to_i
+      @number = gets.chomp
       break if valid_train_number?(@number)
       puts 'Поезд с таким номером уже существует'
     end
@@ -166,20 +166,20 @@ module InterfaceGUI
     @train_select_id = @trains.size - 1
   end
 
-  def train_near_stations(near_stations)
-    previous_station = if near_stations[:previous_station].nil?
-                         'Поезд на конечной станции'
-                       else
-                         near_stations[:previous_station].name
-                       end
-    next_station = if near_stations[:next_station].nil?
-                     'Поезд на конечной станции'
-                   else
-                     near_stations[:next_station].name
-                   end
-    puts 'Предыдущая станция:' + previous_station.to_s
-    puts 'Следующая станция:' + next_station.to_s
-  end
+  # def train_near_stations(near_stations)
+  #   previous_station = if near_stations[:previous_station].nil?
+  #                        'Поезд на конечной станции'
+  #                      else
+  #                        near_stations[:previous_station].name
+  #                      end
+  #   next_station = if near_stations[:next_station].nil?
+  #                    'Поезд на конечной станции'
+  #                  else
+  #                    near_stations[:next_station].name
+  #                  end
+  #   puts 'Предыдущая станция:' + previous_station.to_s
+  #   puts 'Следующая станция:' + next_station.to_s
+  # end
 
   def new_station
     puts '==========================='

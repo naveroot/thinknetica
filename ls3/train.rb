@@ -1,6 +1,5 @@
 class Train
   attr_reader :wagons, :speed, :route, :number
-
   def initialize(number)
     @wagons = []
     @number = number
@@ -31,8 +30,9 @@ class Train
   end
 
   def go_next_station
-    raise if @route.nil?
-    if @current_station_id >= @route.stations.size - 1
+    if @route.nil?
+      puts 'Сначала выберите маршрут'
+    elsif @current_station_id >= @route.stations.size - 1
       puts 'Конечная станция. Конец маршрута.'
     else
       remove_from_current_station
@@ -40,34 +40,39 @@ class Train
       puts "Едем в #{@route.stations[@current_station_id].name}"
       add_to_current_station
     end
-  rescue
-    puts 'Сначала выберите маршрут'
   end
 
   def go_previous_station
-    raise if @route.nil?
-    if @current_station_id.zero?
+    if @route.nil?
+      puts 'Сначала выберите маршрут'
+    elsif @current_station_id.zero?
       puts 'Конечная станция. Конец маршрута.'
     else
       remove_from_current_station
       @current_station_id -= 1
       puts "Едем в #{@route.stations[@current_station_id].name}"
       add_to_current_station
-    end
-  rescue
-    puts 'Сначала выберите маршрут'
+      end
   end
 
   def near_stations
-    raise if @route.nil?
-    near_stations = {}
-    near_stations[:previous_station] = @route.stations[@current_station_id - 1] if @current_station_id > 0
-    near_stations[:next_station] = @route.stations[@current_station_id + 1] if @current_station_id >= @route.stations.size - 1
-    return near_stations
-  rescue
-    puts 'Сначала выберите маршрут'
+    if @route.nil?
+      puts 'Сначала выберите маршрут'
+    else
+      previous_station = if @current_station_id.zero?
+                           'Поезд на конечной станции'
+                         else
+                           @route.stations[@current_station_id - 1].name
+                         end
+      next_station = if @current_station_id <= @route.stations.size - 2
+                       @route.stations[@current_station_id + 1].name
+                     else
+                       'Поезд на конечной станции'
+                     end
+      puts 'Предыдущая станция:' + previous_station.to_s
+      puts 'Следующая станция:' + next_station.to_s
+      end
   end
-
 
   def add_route(route)
     remove_from_current_station unless @route.nil?
@@ -76,18 +81,18 @@ class Train
     add_to_current_station
   end
 
-  def add_wagon(wagon)
-    if stop?
-      COMPARABLE_WAGONS_TYPES.include?(wagon.class) ? @wagons << wagon : 'Неверный тип вагона'
-      current_wagons
-    else
-      puts 'Цеплять или отцеплять вагоны можно только при полной остановке'
-    end
-  end
+  # def add_wagon(wagon)
+  #   if stop?
+  #     COMPARABLE_WAGONS_TYPES.include?(wagon.class) ? @wagons << wagon : 'Неверный тип вагона'
+  #     current_wagons
+  #   else
+  #     puts 'Цеплять или отцеплять вагоны можно только при полной остановке'
+  #   end
+  # end
 
   def remove_wagon
     if stop?
-      @wagons = @wagons.delete_at(-1)
+      @wagons.delete_at(-1)
       current_wagons
     else
       puts 'Цеплять или отцеплять вагоны можно только при полной остановке'
