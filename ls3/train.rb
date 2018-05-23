@@ -81,14 +81,18 @@ class Train
     add_to_current_station
   end
 
-  # def add_wagon(wagon)
-  #   if stop?
-  #     COMPARABLE_WAGONS_TYPES.include?(wagon.class) ? @wagons << wagon : 'Неверный тип вагона'
-  #     current_wagons
-  #   else
-  #     puts 'Цеплять или отцеплять вагоны можно только при полной остановке'
-  #   end
-  # end
+  def add_wagon(wagon)
+    if stop?
+      if @type == wagon.type
+        @wagons << wagon
+      else
+        puts 'Неверный тип вагона'
+      end
+      current_wagons
+    else
+      puts 'Цеплять или отцеплять вагоны можно только при полной остановке'
+    end
+  end
 
   def remove_wagon
     if stop?
