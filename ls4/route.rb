@@ -1,12 +1,11 @@
-# Имеет начальную и конечную станцию, а также список промежуточных станций
-# Может добавлять станцию в список
-# Может удалять станцию из списка
-# Может выводить список всех станций по-порядку от начальной до конечной
+require_relative 'instance_counter'
 class Route
+  include InstanceCounter
   attr_accessor :stations
 
   def initialize(first_station, last_station)
     @stations = [first_station, last_station]
+    instances_counter_up
   end
 
   def add_station(station)
