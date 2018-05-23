@@ -5,6 +5,7 @@ class Train
   include VendorInfo
   include InstanceCounter
   attr_reader :wagons, :speed, :route, :number
+
   def initialize(number)
     @wagons = []
     @number = number
@@ -67,7 +68,7 @@ class Train
       @current_station_id -= 1
       puts "Едем в #{@route.stations[@current_station_id].name}"
       add_to_current_station
-      end
+    end
   end
 
   def near_stations
@@ -86,7 +87,7 @@ class Train
                      end
       puts 'Предыдущая станция:' + previous_station.to_s
       puts 'Следующая станция:' + next_station.to_s
-      end
+    end
   end
 
   def add_route(route)

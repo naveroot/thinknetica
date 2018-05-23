@@ -30,7 +30,7 @@ class Station
       number = gets.chomp.to_i
       @trains.delete_at(number)
       puts 'Поезд удален'
-      end
+    end
   end
 
   def remove_train(train)

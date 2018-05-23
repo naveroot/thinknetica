@@ -26,10 +26,10 @@ class Route
   end
 
   def middle_station_list
-    @stations[1...@stations.size - 1].each_with_index { |station, index| puts "[#{index}] #{station.name}" }
+    @stations[1...@stations.size - 1].each_with_index {|station, index| puts "[#{index}] #{station.name}"}
   end
 
   def all_station_list
-    @stations.each_with_index { |station, index| puts "[#{index}] #{station.name}" }
+    @stations.each_with_index {|station, index| puts "[#{index}] #{station.name}"}
   end
 end
