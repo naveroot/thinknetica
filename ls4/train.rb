@@ -1,10 +1,25 @@
+require_relative 'vendor_info'
+require_relative 'instance_counter'
 class Train
+  @@trains = []
+  include VendorInfo
+  include InstanceCounter
   attr_reader :wagons, :speed, :route, :number
   def initialize(number)
     @wagons = []
     @number = number
     @speed = 0
     @route = nil
+    @@trains << self
+    instances_counter_up
+  end
+
+  def self.find(number)
+    if @@trains.map(&:number).include?(number)
+      @@trains.select {|train| train.number == number}.first
+    else
+      nil
+    end
   end
 
   def speed_up

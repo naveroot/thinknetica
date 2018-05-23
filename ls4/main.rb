@@ -120,6 +120,3 @@ class LessonOOP
     end
   end
 end
-
-lesson = LessonOOP.new
-lesson.start
