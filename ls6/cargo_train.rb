@@ -6,4 +6,11 @@ class CargoTrain < Train
     @type = :cargo
     super(name)
   end
+
+  protected
+
+  def validate!
+    raise 'Тип поезда не соответствует классу' if type != :cargo
+    super
+  end
 end

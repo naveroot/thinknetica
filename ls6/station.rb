@@ -7,6 +7,7 @@ class Station
   def initialize(name)
     @name = name
     @trains = []
+    validate!
     @@stations << self
     instances_counter_up
   end
@@ -59,5 +60,19 @@ class Station
     end
     puts "Число грузовых составов на станции #{@name}: #{@cargo_trains_counter}"
     puts "Число пассажирских составов на станции #{@name}: #{@passenger_train_counter}"
+  end
+
+  def valid?
+    validate!
+  rescue
+    false9
+  end
+
+  protected
+
+  def validate!
+    raise 'Название не может быть пустым' if name == ''
+    raise 'Станция с таким названием уже создана' if @@stations.map(&:name).include?(name)
+    true
   end
 end

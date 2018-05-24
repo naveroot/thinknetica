@@ -1,10 +1,19 @@
 require_relative 'instance_counter'
 class Route
+  @@routes = []
   include InstanceCounter
   attr_accessor :stations
 
+  def self.all
+    @@routes
+  end
+
   def initialize(first_station, last_station)
     @stations = [first_station, last_station]
+    @first_station = first_station
+    @last_station = last_station
+    validate!
+    @@routes << self
     instances_counter_up
   end
 
@@ -30,5 +39,17 @@ class Route
 
   def all_station_list
     @stations.each_with_index {|station, index| puts "[#{index}] #{station.name}"}
+  end
+
+  def valid?
+    validate!
+  rescue
+    false
+  end
+
+  protected
+
+  def validate!
+    raise 'Станцией назначения не может быть станция отправления' if @first_station == @last_station
   end
 end

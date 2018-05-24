@@ -34,8 +34,8 @@ module InterfaceGUI
     puts '======================== '
     puts 'Меню управления станциями'
     puts '======================== '
-    puts 'Выбраная станция: ' + @stations[@station_select_id].name.to_s
-    puts 'Число поездов на станции: ' + @stations[@station_select_id].trains.size.to_s
+    puts 'Выбраная станция: ' + Station.all[@station_select_id].name.to_s
+    puts 'Число поездов на станции: ' + Station.all[@station_select_id].trains.size.to_s
     puts 'Выберите действие: '
     puts '1. Создать станцию '
     puts '2. Добавить поезд на станцию '
@@ -52,9 +52,9 @@ module InterfaceGUI
     puts 'Меню управления маршрутами'
     puts '========================'
     puts 'Выбраный маршрут: ' +
-             @routes[@route_select_id].stations.first.name +
+             Route.all[@route_select_id].stations.first.name +
              ' - ' +
-             @routes[@route_select_id].stations.last.name
+             Route.all[@route_select_id].stations.last.name
     puts 'Выберите действие: '
     puts '1. Создать маршрут '
     puts '2. Добавить  промежуточную станцию '
@@ -67,14 +67,14 @@ module InterfaceGUI
   def selected_train
     puts 'Выбраный поезд:'
     puts '========================='
-    puts 'номер: ' + @trains[@train_select_id].number.to_s
-    puts 'скорость: ' + @trains[@train_select_id].speed.to_s
-    puts 'текущая станция: ' + if @trains[@train_select_id].route.nil?
+    puts 'номер: ' + Train.all[@train_select_id].number.to_s
+    puts 'скорость: ' + Train.all[@train_select_id].speed.to_s
+    puts 'текущая станция: ' + if Train.all[@train_select_id].route.nil?
                                  'нет маршрута'
                                else
-                                 @trains[@train_select_id].current_station.to_s
+                                 Train.all[@train_select_id].current_station.to_s
                                end
-    puts 'число вагонов: ' + @trains[@train_select_id].wagons.size.to_s
+    puts 'число вагонов: ' + Train.all[@train_select_id].wagons.size.to_s
     puts '========================='
   end
 
@@ -82,7 +82,7 @@ module InterfaceGUI
     puts '========================'
     puts 'Меню управления поездами'
     puts '========================'
-    selected_train unless @trains.empty?
+    selected_train unless Train.all.empty?
     puts 'Выберите действие: '
     puts '1. Создать поезд'
     puts '2. Набрать скорость'
@@ -98,35 +98,35 @@ module InterfaceGUI
   end
 
   def station_list
-    if @stations.empty?
+    if Station.all.empty?
       puts 'В списке нет станций'
       new_station
     else
       puts 'Список всех станций: '
-      @stations.each_with_index {|station, index| puts "[#{index}] #{station.name}"}
-      @station_select_id = protected_prompt(@stations.size)
+      Station.all.each_with_index {|station, index| puts "[#{index}] #{station.name}"}
+      @station_select_id = protected_prompt(Station.all.size)
     end
   end
 
   def trains_list
-    if @trains.empty?
+    if Train.all.empty?
       puts 'В списке нет поездов'
       new_train
-      @train_select_id = @trains.size - 1
+      @train_select_id = Train.all.size - 1
     else
       puts 'Список всех поездов: '
-      @trains.each_with_index {|train, index| puts "[#{index}] #{train.class} #{train.number} #{train.wagons.size}"}
-      @train_select_id = protected_prompt(@trains.size)
+      Train.all.each_with_index {|train, index| puts "[#{index}] #{train.class} #{train.number} #{train.wagons.size}"}
+      @train_select_id = protected_prompt(Train.all.size)
     end
   end
 
   def routes_list
-    if @routes.empty?
+    if Route.all.empty?
       puts 'В списке нет маршрутов'
       new_route
     else
       puts 'Список всех маршрутов: '
-      @routes.each_with_index {|route, index| puts "[#{index}] #{route.stations.first.name} - #{route.stations.last.name}"}
+      Route.all.each_with_index {|route, index| puts "[#{index}] #{route.stations.first.name} - #{route.stations.last.name}"}
     end
   end
 
@@ -134,72 +134,51 @@ module InterfaceGUI
     puts '==========================='
     puts 'Создаем новый маршрут'
     puts '==========================='
-    if @stations.size < 2
+    if Station.all.size < 2
       puts 'Что бы создать маршрут должно быть минимум 2 станции'
-      new_station while @stations.size < 2
+      new_station while Station.all.size < 2
     end
     puts 'Выберите станцию отправления:'
     station_list
-    first_station = @stations[@station_select_id]
+    first_station = Station.all[@station_select_id]
     puts 'Выберите конечную станцию:'
     station_list
-    last_station = @stations[@station_select_id]
-    @routes << Route.new(first_station, last_station)
-    @route_select_id = @routes.size - 1
+    last_station = Station.all[@station_select_id]
+    Route.new(first_station, last_station)
+    @route_select_id = Route.all.size - 1
+  rescue RuntimeError => error
+    puts error.message
+    retry
   end
 
   def new_train
     puts '==========================='
     puts 'Создаем новый поезд'
     puts '==========================='
-    loop do
-      puts 'Введите номер поезда:'
-      @number = gets.chomp
-      break if valid_train_number?(@number)
-      puts 'Поезд с таким номером уже существует'
-    end
+    puts 'Номер поезда имеет формат ХХХ-ХХ или ХХХХХ'
+    puts 'Введите номер поезда:'
+    @number = gets.chomp.upcase
     puts 'Выберите тип поезда:'
     TRAIN_TYPE.each_with_index {|type, index| puts "[#{index}] #{type}"}
     choice = protected_prompt(TRAIN_TYPE.size)
     train_type = TRAIN_TYPE[choice]
-    @trains << TrainFactory.build(number: @number, type: train_type)
-    @train_select_id = @trains.size - 1
+    train_type.new @number
+    @train_select_id = Train.all.size - 1
+  rescue RuntimeError => error
+    puts error.message
+    retry
   end
-
-  # def train_near_stations(near_stations)
-  #   previous_station = if near_stations[:previous_station].nil?
-  #                        'Поезд на конечной станции'
-  #                      else
-  #                        near_stations[:previous_station].name
-  #                      end
-  #   next_station = if near_stations[:next_station].nil?
-  #                    'Поезд на конечной станции'
-  #                  else
-  #                    near_stations[:next_station].name
-  #                  end
-  #   puts 'Предыдущая станция:' + previous_station.to_s
-  #   puts 'Следующая станция:' + next_station.to_s
-  # end
 
   def new_station
     puts '==========================='
     puts 'Создаем новую станцию'
     puts '==========================='
-    loop do
-      puts 'Введите название станции'
-      @station_name = gets.chomp
-      break if valid_station_name?(@station_name)
-      puts 'Неверное название станции. Название не моет быть пустым, либо станция уже создана'
-    end
-    @stations << Station.new(@station_name)
-    @station_select_id = @stations.size - 1
-  end
-
-  def valid_station_name?(station_name)
-    !(@stations.map(&:name).include?(station_name) || station_name == '')
-  end
-
-  def valid_train_number?(train_name)
-    !@trains.map(&:number).include?(train_name)
+    puts 'Введите название станции'
+    @station_name = gets.chomp
+    Station.new @station_name
+    @station_select_id = Station.all.size - 1
+  rescue RuntimeError => error
+    puts error.message
+    retry
   end
 end

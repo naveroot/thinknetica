@@ -7,16 +7,10 @@ require_relative 'cargo_wagon'
 require_relative 'passenger_train'
 require_relative 'passenger_wagon'
 require_relative 'interface_gui'
-require_relative 'train_factory'
+
 
 class LessonOOP
   include InterfaceGUI
-
-  def initialize
-    @stations = []
-    @routes = []
-    @trains = []
-  end
 
   def start
     main_menu
@@ -48,22 +42,22 @@ class LessonOOP
       when 1
         new_train
       when 2
-        @trains[@train_select_id].speed_up
+        Train.all[@train_select_id].speed_up
       when 3
-        @trains[@train_select_id].stop
+        Train.all[@train_select_id].stop
       when 4
-        @trains[@train_select_id].add_wagon(@trains[@train_select_id].is_a?(CargoTrain) ? CargoWagon.new : PassengerWagon.new)
+        Train.all[@train_select_id].add_wagon(Train.all[@train_select_id].is_a?(CargoTrain) ? CargoWagon.new : PassengerWagon.new)
       when 5
-        @trains[@train_select_id].remove_wagon
+        Train.all[@train_select_id].remove_wagon
       when 6
         routes_list
-        @trains[@train_select_id].add_route(@routes[@route_select_id])
+        Train.all[@train_select_id].add_route(Route.all[@route_select_id])
       when 7
-        @trains[@train_select_id].go_next_station
+        Train.all[@train_select_id].go_next_station
       when 8
-        @trains[@train_select_id].go_previous_station
+        Train.all[@train_select_id].go_previous_station
       when 9
-        @trains[@train_select_id].near_stations
+        Train.all[@train_select_id].near_stations
       when 10
         break
       else
@@ -81,11 +75,11 @@ class LessonOOP
       when 2
         puts 'Выберите станцию для добавления:'
         station_list
-        @routes[@route_select_id].add_station(@stations[@station_select_id])
+        Route.all[@route_select_id].add_station(Station.all[@station_select_id])
       when 3
-        @routes[@route_select_id].remove_station
+        Route.all[@route_select_id].remove_station
       when 4
-        @routes[@route_select_id].all_station_list
+        Route.all[@route_select_id].all_station_list
       when 9
         break
       else
@@ -103,13 +97,13 @@ class LessonOOP
         new_station
       when 2
         trains_list
-        @stations[@station_select_id].add_train(@trains[@train_select_id])
+        Station.all[@station_select_id].add_train(Train.all[@train_select_id])
       when 3
-        @stations[@station_select_id].show_trains
+        Station.all[@station_select_id].show_trains
       when 4
-        @stations[@station_select_id].show_train_types
+        Station.all[@station_select_id].show_train_types
       when 5
-        @stations[@station_select_id].show_remove_train
+        Station.all[@station_select_id].show_remove_train
       when 6
         station_list
       when 9
@@ -120,3 +114,6 @@ class LessonOOP
     end
   end
 end
+
+lesson = LessonOOP.new
+lesson.start

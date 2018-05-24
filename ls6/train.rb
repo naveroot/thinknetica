@@ -1,44 +1,40 @@
 require_relative 'vendor_info'
 require_relative 'instance_counter'
+
 class Train
   @@trains = []
+  @@regexp = /^(\w|\d){3}-?(\w|\d){2}$/
   include VendorInfo
   include InstanceCounter
   attr_reader :wagons, :speed, :route, :number
+
+  def self.all
+    @@trains
+  end
 
   def initialize(number)
     @wagons = []
     @number = number
     @speed = 0
     @route = nil
+    validate!
     @@trains << self
     instances_counter_up
+    train_created
   end
 
   def self.find(number)
     if @@trains.map(&:number).include?(number)
       @@trains.select {|train| train.number == number}.first
-    else
-      nil
     end
   end
 
   def speed_up
     @speed += 10
-    current_speed
   end
 
   def stop
     @speed = 0
-    current_speed
-  end
-
-  def current_speed
-    puts "Скорость поезда: #{@speed}"
-  end
-
-  def current_wagons
-    puts "Колличество вагонов: #{@wagons.size}"
   end
 
   def current_station
@@ -104,22 +100,40 @@ class Train
       else
         puts 'Неверный тип вагона'
       end
-      current_wagons
     else
       puts 'Цеплять или отцеплять вагоны можно только при полной остановке'
     end
   end
 
   def remove_wagon
-    if stop?
+    if @wagons.empty?
+      puts 'У поезда нет вагонов'
+    elsif stop?
       @wagons.delete_at(-1)
-      current_wagons
     else
       puts 'Цеплять или отцеплять вагоны можно только при полной остановке'
     end
   end
 
-  private # Используется только внутри класса
+  def valid?
+    validate!
+  rescue
+    false
+  end
+
+  protected # Используется только внутри класса
+
+  def validate!
+    puts @@trains.map(&:number)
+    puts number
+    raise 'Поезд с таким номером уже существует' if @@trains.map(&:number).include?(number)
+    raise 'Номер поезда не соответствует заданным параметрам' if number !~ @@regexp
+    true
+  end
+
+  def train_created
+    puts "Поезд типа #{self.class} под номером #{@number} успешно добавлен"
+  end
 
   def add_to_current_station
     @route.stations[@current_station_id].add_train(self)
