@@ -65,7 +65,7 @@ class Station
   def valid?
     validate!
   rescue
-    false9
+    false
   end
 
   protected
