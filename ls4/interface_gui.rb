@@ -52,9 +52,9 @@ module InterfaceGUI
     puts 'Меню управления маршрутами'
     puts '========================'
     puts 'Выбраный маршрут: ' +
-         @routes[@route_select_id].stations.first.name +
-         ' - ' +
-         @routes[@route_select_id].stations.last.name
+             @routes[@route_select_id].stations.first.name +
+             ' - ' +
+             @routes[@route_select_id].stations.last.name
     puts 'Выберите действие: '
     puts '1. Создать маршрут '
     puts '2. Добавить  промежуточную станцию '
@@ -103,7 +103,7 @@ module InterfaceGUI
       new_station
     else
       puts 'Список всех станций: '
-      @stations.each_with_index { |station, index| puts "[#{index}] #{station.name}" }
+      @stations.each_with_index {|station, index| puts "[#{index}] #{station.name}"}
       @station_select_id = protected_prompt(@stations.size)
     end
   end
@@ -115,7 +115,7 @@ module InterfaceGUI
       @train_select_id = @trains.size - 1
     else
       puts 'Список всех поездов: '
-      @trains.each_with_index { |train, index| puts "[#{index}] #{train.class} #{train.number} #{train.wagons.size}" }
+      @trains.each_with_index {|train, index| puts "[#{index}] #{train.class} #{train.number} #{train.wagons.size}"}
       @train_select_id = protected_prompt(@trains.size)
     end
   end
@@ -126,7 +126,7 @@ module InterfaceGUI
       new_route
     else
       puts 'Список всех маршрутов: '
-      @routes.each_with_index { |route, index| puts "[#{index}] #{route.stations.first.name} - #{route.stations.last.name}" }
+      @routes.each_with_index {|route, index| puts "[#{index}] #{route.stations.first.name} - #{route.stations.last.name}"}
     end
   end
 
@@ -159,7 +159,7 @@ module InterfaceGUI
       puts 'Поезд с таким номером уже существует'
     end
     puts 'Выберите тип поезда:'
-    TRAIN_TYPE.each_with_index { |type, index| puts "[#{index}] #{type}" }
+    TRAIN_TYPE.each_with_index {|type, index| puts "[#{index}] #{type}"}
     choice = protected_prompt(TRAIN_TYPE.size)
     train_type = TRAIN_TYPE[choice]
     @trains << TrainFactory.build(number: @number, type: train_type)
