@@ -3,7 +3,7 @@ require_relative 'instance_counter'
 
 class Train
   @@trains = []
-  @@regexp = /^(\w|\d){3}-?(\w|\d){2}$/
+  REGEXP_VALIDATE = /^(\w|\d){3}-?(\w|\d){2}$/
   include VendorInfo
   include InstanceCounter
   attr_reader :wagons, :speed, :route, :number
@@ -127,7 +127,7 @@ class Train
     puts @@trains.map(&:number)
     puts number
     raise 'Поезд с таким номером уже существует' if @@trains.map(&:number).include?(number)
-    raise 'Номер поезда не соответствует заданным параметрам' if number !~ @@regexp
+    raise 'Номер поезда не соответствует заданным параметрам' if number !~ REGEXP_VALIDATE
     true
   end
 

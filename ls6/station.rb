@@ -38,7 +38,7 @@ class Station
 
   def show_trains
     if @trains.empty?
-      p "There are no trains"
+      p 'There are no trains'
     else
       @trains.each_with_index do |train, index|
         puts "#{index} | Номер: #{train.number}"
@@ -58,19 +58,22 @@ class Station
         @passenger_train_counter += 1
       end
     end
-    puts "Число грузовых составов на станции #{@name}: #{@cargo_trains_counter}"
-    puts "Число пассажирских составов на станции #{@name}: #{@passenger_train_counter}"
+    {
+        cargo_counter: @cargo_trains_counter,
+        passenger_counter: @passenger_train_counter
+    }
   end
 
   def valid?
     validate!
-  rescue
+  rescue StandardError
     false
   end
 
   protected
 
   def validate!
+    raise 'name должно быть строкой' unless name.is_a? String
     raise 'Название не может быть пустым' if name == ''
     raise 'Станция с таким названием уже создана' if @@stations.map(&:name).include?(name)
     true
