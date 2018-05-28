@@ -24,9 +24,8 @@ class Train
   end
 
   def self.find(number)
-    if @@trains.map(&:number).include?(number)
-      @@trains.select {|train| train.number == number}.first
-    end
+    raise 'Такого поезда не существует' unless @@trains.map(&:number).include?(number)
+    @@trains.select {|train| train.number == number}.first
   end
 
   def speed_up
@@ -38,55 +37,34 @@ class Train
   end
 
   def current_station
-    @route.stations[@current_station_id].name
+    @route.stations[@current_station_id]
   end
 
   def go_next_station
-    if @route.nil?
-      puts 'Сначала выберите маршрут'
-    elsif @current_station_id >= @route.stations.size - 1
-      puts 'Конечная станция. Конец маршрута.'
-    else
-      remove_from_current_station
-      @current_station_id += 1
-      puts "Едем в #{@route.stations[@current_station_id].name}"
-      add_to_current_station
-    end
+    raise 'У поезда нет маршрута' if @route.nil?
+    raise puts 'Конечная станция. Конец маршрута.' if @current_station_id >= @route.stations.size - 1
+    remove_from_current_station
+    @current_station_id += 1
+    add_to_current_station
   end
 
   def go_previous_station
-    if @route.nil?
-      puts 'Сначала выберите маршрут'
-    elsif @current_station_id.zero?
-      puts 'Конечная станция. Конец маршрута.'
-    else
-      remove_from_current_station
-      @current_station_id -= 1
-      puts "Едем в #{@route.stations[@current_station_id].name}"
-      add_to_current_station
-    end
+    raise 'У поезда нет маршрута' if @route.nil?
+    raise puts 'Конечная станция. Конец маршрута.' if @current_station_id.zero?
+    remove_from_current_station
+    @current_station_id -= 1
+    add_to_current_station
   end
 
   def near_stations
-    if @route.nil?
-      puts 'Сначала выберите маршрут'
-    else
-      previous_station = if @current_station_id.zero?
-                           'Поезд на конечной станции'
-                         else
-                           @route.stations[@current_station_id - 1].name
-                         end
-      next_station = if @current_station_id <= @route.stations.size - 2
-                       @route.stations[@current_station_id + 1].name
-                     else
-                       'Поезд на конечной станции'
-                     end
-      puts 'Предыдущая станция:' + previous_station.to_s
-      puts 'Следующая станция:' + next_station.to_s
-    end
+    raise 'У поезда нет маршрута' if @route.nil?
+    previous_station = @route.stations[@current_station_id - 1] if @current_station_id > 0
+    next_station = @route.stations[@current_station_id + 1] if @current_station_id < @route.stations.size - 1
+    {previous_station: previous_station, next_station: next_station}
   end
 
   def add_route(route)
+    raise 'Маршрут должен бывть Route' unless route.is_a? Route
     remove_from_current_station unless @route.nil?
     @current_station_id = 0
     @route = route
@@ -94,25 +72,15 @@ class Train
   end
 
   def add_wagon(wagon)
-    if stop?
-      if @type == wagon.type
-        @wagons << wagon
-      else
-        puts 'Неверный тип вагона'
-      end
-    else
-      puts 'Цеплять или отцеплять вагоны можно только при полной остановке'
-    end
+    raise 'Цеплять или отцеплять вагоны можно только при полной остановке' unless stop?
+    raise 'Неверный тип вагона' unless @type == wagon.type
+    @wagons << wagon
   end
 
   def remove_wagon
-    if @wagons.empty?
-      puts 'У поезда нет вагонов'
-    elsif stop?
-      @wagons.delete_at(-1)
-    else
-      puts 'Цеплять или отцеплять вагоны можно только при полной остановке'
-    end
+    raise 'Цеплять или отцеплять вагоны можно только при полной остановке' unless stop?
+    raise 'У поезда нет вагонов' if @wagons.empty?
+    @wagons.delete_at(-1)
   end
 
   def valid?
@@ -124,8 +92,6 @@ class Train
   protected # Используется только внутри класса
 
   def validate!
-    puts @@trains.map(&:number)
-    puts number
     raise 'Поезд с таким номером уже существует' if @@trains.map(&:number).include?(number)
     raise 'Номер поезда не соответствует заданным параметрам' if number !~ REGEXP_VALIDATE
     true

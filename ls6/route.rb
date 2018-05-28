@@ -18,29 +18,21 @@ class Route
   end
 
   def add_station(station)
+    raise 'Эта станция уже есть в маршруте' if @stations.include? station
+    raise 'station must be Station' unless station.is_a? Station
     @stations.insert(-2, station)
   end
 
-  def remove_station
-    if @stations.size < 3
-      puts 'no middle stations'
-    else
-      puts 'Выберите станцию для удаления:'
-      middle_station_list
-      station_id = gets.chomp.to_i
-      @stations.delete_at(station_id + 1)
-      puts 'Станция удалена'
-    end
+  def remove_station(station)
+    raise 'Нет промежуточных станций' if @stations.size < 3
+    raise 'В маршруте нет такой станции' unless @stations.include? station
+    raise 'Нельзя удалить начальную или конечную станцию маршрута' if station == @first_station || station == @last_station
+    @stations.delete(station)
   end
 
-  def middle_station_list
-    @stations[1...@stations.size - 1].each_with_index {|station, index| puts "[#{index}] #{station.name}"}
+  def middle_stations
+    @stations[1...@stations.size - 1]
   end
-
-  def all_station_list
-    @stations.each_with_index {|station, index| puts "[#{index}] #{station.name}"}
-  end
-
   def valid?
     validate!
   rescue

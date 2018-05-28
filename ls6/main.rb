@@ -12,7 +12,15 @@ require_relative 'interface_gui'
 class LessonOOP
   include InterfaceGUI
 
+  def seed
+    CargoTrain.new 'ASDFG'
+    PassengerTrain.new '12345'
+    Station.new 'Asd'
+    Station.new 'Sdf'
+    Station.new 'GHj'
+  end
   def start
+    seed
     main_menu
   end
 
@@ -36,9 +44,10 @@ class LessonOOP
   end
 
   def train_menu
-    trains_list
     loop do
       case trains_menu_choice
+      when 0
+        select_train
       when 1
         new_train
       when 2
@@ -50,7 +59,7 @@ class LessonOOP
       when 5
         Train.all[@train_select_id].remove_wagon
       when 6
-        routes_list
+        select_route
         Train.all[@train_select_id].add_route(Route.all[@route_select_id])
       when 7
         Train.all[@train_select_id].go_next_station
@@ -63,55 +72,61 @@ class LessonOOP
       else
         enter_correct_choice
       end
+      press_any_key
     end
+  rescue RuntimeError => error
+    puts error.message
+    press_any_key
+    retry
   end
 
   def route_menu
-    routes_list
     loop do
       case routes_menu_choice
       when 1
         new_route
       when 2
-        puts 'Выберите станцию для добавления:'
-        station_list
-        Route.all[@route_select_id].add_station(Station.all[@station_select_id])
+        add_station_to_route
       when 3
-        Route.all[@route_select_id].remove_station
-      when 4
-        Route.all[@route_select_id].all_station_list
+        remove_station_from_route
       when 9
         break
       else
         enter_correct_choice
       end
-
     end
+  rescue RuntimeError => error
+    puts error.message
+    press_any_key
+    retry
   end
 
   def stations_menu
-    station_list
     loop do
       case stations_menu_choice
+      when 0
+        select_station
       when 1
         new_station
       when 2
-        trains_list
-        Station.all[@station_select_id].add_train(Train.all[@train_select_id])
+        add_train_to_station
       when 3
-        Station.all[@station_select_id].show_trains
-      when 4
-        Station.all[@station_select_id].show_train_types
-      when 5
-        Station.all[@station_select_id].show_remove_train
-      when 6
-        station_list
+        remove_train_from_station
       when 9
         break
       else
         enter_correct_choice
       end
     end
+  rescue RuntimeError => error
+    puts error.message
+    press_any_key
+    retry
+  end
+
+  def press_any_key
+    puts 'press any key...'
+    gets
   end
 end
 
