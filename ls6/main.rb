@@ -7,7 +7,10 @@ require_relative 'cargo_wagon'
 require_relative 'passenger_train'
 require_relative 'passenger_wagon'
 require_relative 'interface_gui'
-
+require_relative 'route_gui'
+require_relative 'train_gui'
+require_relative 'station_gui'
+require_relative 'vendor_info'
 
 class LessonOOP
   include InterfaceGUI
