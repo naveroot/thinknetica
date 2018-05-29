@@ -11,7 +11,7 @@ require_relative 'route_gui'
 require_relative 'train_gui'
 require_relative 'station_gui'
 require_relative 'vendor_info'
-
+require_relative 'instance_counter'
 class LessonOOP
   include InterfaceGUI
 
