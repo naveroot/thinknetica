@@ -16,6 +16,11 @@ class Station
     @@stations
   end
 
+  def each_train_on_station(&block)
+    raise 'Нужно передать блок' unless block_given?
+    @trains.each {|train| yield(train)}
+  end
+
   def add_train(train)
     raise 'train must be Train' unless train.is_a? Train
     raise 'Этот поезд уже есть на станции' if @trains.include? train

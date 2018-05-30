@@ -5,7 +5,10 @@ module StationGUI
     puts 'Число поездов на станции: ' + @selected_station.trains.size.to_s
     puts 'Из них пассажирских: ' + @selected_station.trains.select {|train| train.is_a? PassengerTrain}.size.to_s
     puts 'Из них грузовых: ' + @selected_station.trains.select {|train| train.is_a? CargoTrain}.size.to_s
-    puts 'Список поездов: ' + @selected_station.trains.map(&:number).join(' ')
+    puts 'Список поездов: '
+    @selected_station.each_train_on_station do |train|
+      puts "#{train.number} #{train.type} #{train.wagons}"
+    end
   end
 
   def stations_menu_choice

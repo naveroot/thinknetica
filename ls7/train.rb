@@ -40,6 +40,11 @@ class Train
     @route.stations[@current_station_id]
   end
 
+  def each_wagon_in_train(&block)
+    raise 'Нужно передать блок' unless block_given?
+    @wagons.each {|wagon| yield(wagon)}
+  end
+
   def go_next_station
     raise 'У поезда нет маршрута' if @route.nil?
     raise puts 'Конечная станция. Конец маршрута.' if @current_station_id >= @route.stations.size - 1

@@ -30,7 +30,7 @@ module RouteGUI
   def select_route
     raise 'В списке нет маршрутов' if Route.all.empty?
     puts 'Список всех маршрутов: '
-    Route.all.each_with_index {|route, index| puts "[#{index}:  #{route.stations.first.name} - #{route.stations.last.name}"}
+    Route.all.each_with_index {|route, index| puts "#{index}:  #{route.stations.first.name} - #{route.stations.last.name}"}
     @route_select_id = protected_prompt(Route.all.size)
     @selected_route = Station.all[@station_select_id]
   end

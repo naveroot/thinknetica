@@ -1,12 +1,14 @@
 require_relative 'train_gui'
 require_relative 'station_gui'
 require_relative 'route_gui'
+require_relative 'wagon_gui'
 module InterfaceGUI
 
   def self.included(base_class)
     base_class.send :include, TrainGUI
     base_class.send :include, StationGUI
     base_class.send :include, RouteGUI
+    base_class.send :include, WagonGui
   end
 
   private

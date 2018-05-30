@@ -12,15 +12,17 @@ require_relative 'train_gui'
 require_relative 'station_gui'
 require_relative 'vendor_info'
 require_relative 'instance_counter'
+require_relative 'wagon_gui'
+
 class LessonOOP
   include InterfaceGUI
 
   def seed
-    CargoTrain.new 'ASDFG'
-    PassengerTrain.new '12345'
-    Station.new 'Asd'
-    Station.new 'Sdf'
-    Station.new 'GHj'
+    CargoTrain.new 'CT001'
+    PassengerTrain.new 'PT001'
+    Station.new 'Moscow'
+    Station.new 'Pskov'
+    Station.new 'Novgorod'
   end
   def start
     seed
@@ -58,19 +60,31 @@ class LessonOOP
       when 3
         Train.all[@train_select_id].stop
       when 4
-        Train.all[@train_select_id].add_wagon(Train.all[@train_select_id].is_a?(CargoTrain) ? CargoWagon.new : PassengerWagon.new)
+        new_wagon(Train.all[@train_select_id])
       when 5
         Train.all[@train_select_id].remove_wagon
       when 6
         select_route
         Train.all[@train_select_id].add_route(Route.all[@route_select_id])
       when 7
-        Train.all[@train_select_id].go_next_station
+        if Train.all[@train_select_id].is_a? CargoTrain
+          Train.all[@train_select_id].each_wagon_in_train do |wagon|
+            puts "#{wagon.name} #{wagon.type} занято:#{wagon.occupied_volume} свободно:#{wagon.available_volume}"
+          end
+        else
+          Train.all[@train_select_id].each_wagon_in_train do |wagon|
+            puts "#{wagon.name} #{wagon.type} занято:#{wagon.occupied_seats} свободно:#{wagon.available_seats}"
+          end
+        end
       when 8
-        Train.all[@train_select_id].go_previous_station
+        add_to_wagon(Train.all[@train_select_id].wagons)
       when 9
-        Train.all[@train_select_id].near_stations
+        Train.all[@train_select_id].go_next_station
       when 10
+        Train.all[@train_select_id].go_previous_station
+      when 11
+        Train.all[@train_select_id].near_stations
+      when 100
         break
       else
         enter_correct_choice
