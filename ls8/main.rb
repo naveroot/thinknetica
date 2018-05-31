@@ -24,12 +24,13 @@ class LessonOOP
     Station.new 'Pskov'
     Station.new 'Novgorod'
   end
+
   def start
     seed
     main_menu
   end
 
-  private #не должнобыть доступно извне
+  private
 
   def main_menu
     loop do
@@ -67,15 +68,7 @@ class LessonOOP
         select_route
         Train.all[@train_select_id].add_route(Route.all[@route_select_id])
       when 7
-        if Train.all[@train_select_id].is_a? CargoTrain
-          Train.all[@train_select_id].each_wagon_in_train do |wagon|
-            puts "#{wagon.name} #{wagon.type} занято:#{wagon.occupied_volume} свободно:#{wagon.available_volume}"
-          end
-        else
-          Train.all[@train_select_id].each_wagon_in_train do |wagon|
-            puts "#{wagon.name} #{wagon.type} занято:#{wagon.occupied_seats} свободно:#{wagon.available_seats}"
-          end
-        end
+        show_all_wagons(Train.all[@train_select_id])
       when 8
         add_to_wagon(Train.all[@train_select_id].wagons)
       when 9
@@ -117,6 +110,7 @@ class LessonOOP
     press_any_key
     retry
   end
+
 
   def stations_menu
     loop do

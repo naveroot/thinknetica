@@ -26,22 +26,26 @@ class Route
   def remove_station(station)
     raise 'Нет промежуточных станций' if @stations.size < 3
     raise 'В маршруте нет такой станции' unless @stations.include? station
-    raise 'Нельзя удалить начальную или конечную станцию маршрута' if station == @first_station || station == @last_station
+    if [@first_station, @last_station].include?(station)
+      raise 'Нельзя удалить начальную или конечную станцию маршрута'
+    end
     @stations.delete(station)
   end
 
   def middle_stations
     @stations[1...@stations.size - 1]
   end
+
   def valid?
     validate!
-  rescue
+  rescue StandardError
     false
   end
 
   protected
 
   def validate!
-    raise 'Станцией назначения не может быть станция отправления' if @first_station == @last_station
+    error1 = 'Станцией назначения не может быть станция отправления'
+    raise error1 if first_station == last_station
   end
 end

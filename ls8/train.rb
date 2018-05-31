@@ -24,7 +24,8 @@ class Train
   end
 
   def self.find(number)
-    raise 'Такого поезда не существует' unless @@trains.map(&:number).include?(number)
+    error1 = 'Такого поезда не существует'
+    raise error1 unless @@trains.map(&:number).include?(number)
     @@trains.select {|train| train.number == number}.first
   end
 
@@ -40,14 +41,14 @@ class Train
     @route.stations[@current_station_id]
   end
 
-  def each_wagon_in_train(&block)
+  def each_wagon_in_train
     raise 'Нужно передать блок' unless block_given?
     @wagons.each {|wagon| yield(wagon)}
   end
 
   def go_next_station
     raise 'У поезда нет маршрута' if @route.nil?
-    raise puts 'Конечная станция. Конец маршрута.' if @current_station_id >= @route.stations.size - 1
+    raise 'Конечная станция. Конец маршрута.' if @current_station_id >= @route.stations.size - 1
     remove_from_current_station
     @current_station_id += 1
     add_to_current_station
@@ -65,7 +66,7 @@ class Train
     raise 'У поезда нет маршрута' if @route.nil?
     previous_station = @route.stations[@current_station_id - 1] if @current_station_id > 0
     next_station = @route.stations[@current_station_id + 1] if @current_station_id < @route.stations.size - 1
-    {previous_station: previous_station, next_station: next_station}
+    { previous_station: previous_station, next_station: next_station }
   end
 
   def add_route(route)
@@ -90,7 +91,7 @@ class Train
 
   def valid?
     validate!
-  rescue
+  rescue StandardError
     false
   end
 

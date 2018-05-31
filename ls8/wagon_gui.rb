@@ -45,4 +45,17 @@ module WagonGui
       raise 'wagon has wrong type'
     end
   end
+
+  def show_all_wagons(train)
+    if train.is_a? CargoTrain
+      train.each_wagon_in_train do |wagon|
+        puts "#{wagon.name} #{wagon.type} занято:#{wagon.occupied_volume} свободно:#{wagon.available_volume}"
+      end
+    else
+      train.each_wagon_in_train do |wagon|
+        puts "#{wagon.name} #{wagon.type} занято:#{wagon.occupied_seats} свободно:#{wagon.available_seats}"
+      end
+    end
+  end
 end
+
