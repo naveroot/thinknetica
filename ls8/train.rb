@@ -64,8 +64,11 @@ class Train
 
   def near_stations
     raise 'У поезда нет маршрута' if @route.nil?
-    previous_station = @route.stations[@current_station_id - 1] if @current_station_id > 0
-    next_station = @route.stations[@current_station_id + 1] if @current_station_id < @route.stations.size - 1
+    if @current_station_id > 0
+      previous_station = @route.stations[@current_station_id - 1]
+    elsif @current_station_id < @route.stations.size - 1
+      next_station = @route.stations[@current_station_id + 1]
+    end
     { previous_station: previous_station, next_station: next_station }
   end
 

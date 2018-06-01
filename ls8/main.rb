@@ -111,7 +111,6 @@ class LessonOOP
     retry
   end
 
-
   def stations_menu
     loop do
       case stations_menu_choice
