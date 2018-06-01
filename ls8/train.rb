@@ -26,7 +26,7 @@ class Train
   def self.find(number)
     error1 = 'Такого поезда не существует'
     raise error1 unless @@trains.map(&:number).include?(number)
-    @@trains.select {|train| train.number == number}.first
+    @@trains.select { |train| train.number == number }.first
   end
 
   def speed_up
@@ -43,7 +43,7 @@ class Train
 
   def each_wagon_in_train
     raise 'Нужно передать блок' unless block_given?
-    @wagons.each {|wagon| yield(wagon)}
+    @wagons.each { |wagon| yield(wagon) }
   end
 
   def go_next_station

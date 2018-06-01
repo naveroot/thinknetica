@@ -1,9 +1,9 @@
 module RouteGUI
   def selected_route_info
     puts 'Выбраный маршрут: ' +
-             Route.all[@route_select_id].stations.first.name +
-             ' - ' +
-             Route.all[@route_select_id].stations.last.name
+         Route.all[@route_select_id].stations.first.name +
+         ' - ' +
+         Route.all[@route_select_id].stations.last.name
     full_route
   end
 
@@ -77,7 +77,7 @@ module RouteGUI
 
   def select_add_station
     acceptable_stations = (Station.all - @selected_route.stations)
-    acceptable_stations.each_with_index {|station, index| puts "#{index}: #{station.name}"}
+    acceptable_stations.each_with_index { |station, index| puts "#{index}: #{station.name}" }
     choice = gets.chomp.to_i
     error1 = 'Введите корректный номер станции'
     raise error1 unless choice.between?(0, acceptable_stations.size - 1)

@@ -18,7 +18,7 @@ class Station
 
   def each_train_on_station
     raise 'Нужно передать блок' unless block_given?
-    @trains.each {|train| yield(train)}
+    @trains.each { |train| yield(train) }
   end
 
   def add_train(train)

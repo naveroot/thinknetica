@@ -8,7 +8,7 @@ module StationGUI
   end
 
   def passenger_trains_info
-    pas_trains = @selected_station.trains.select {|train| train.is_a? PassengerTrain}.size.to_s
+    pas_trains = @selected_station.trains.select { |train| train.is_a? PassengerTrain }.size.to_s
     puts 'Из них пассажирских: ' + pas_trains
   end
 
@@ -86,7 +86,7 @@ module StationGUI
 
   def select_add_train
     puts 'Выберите поезд для добавления: '
-    Train.all.each_with_index {|train, index| puts "#{index}: #{train.number}"}
+    Train.all.each_with_index { |train, index| puts "#{index}: #{train.number}" }
     choice = gets.chomp.to_i
     error1 = 'Введите корректный номер поезда'
     raise error1 unless choice.between?(0, Train.all.size - 1)

@@ -3,7 +3,7 @@ module TrainGUI
 
   def select_train_type
     puts 'Выберите тип поезда:'
-    TRAIN_TYPE.each_with_index {|type, index| puts "[#{index}] #{type}"}
+    TRAIN_TYPE.each_with_index { |type, index| puts "[#{index}] #{type}" }
     choice = protected_prompt(TRAIN_TYPE.size)
     TRAIN_TYPE[choice]
   end
