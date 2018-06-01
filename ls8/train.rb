@@ -98,7 +98,7 @@ class Train
     false
   end
 
-  protected # Используется только внутри класса
+  protected
 
   def validate!
     raise 'Поезд с таким номером уже существует' if @@trains.map(&:number).include?(number)
