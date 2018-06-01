@@ -93,6 +93,8 @@ class LessonOOP
   def route_menu
     loop do
       case routes_menu_choice
+      when 0
+        select_route
       when 1
         new_route
       when 2

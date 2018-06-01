@@ -9,7 +9,7 @@ module TrainGUI
   end
 
   def new_train
-    puts 'Создаем новый поезд \n Номер поезда имеет формат ХХХ-ХХ или ХХХХХ'
+    puts "Создаем новый поезд \nНомер поезда имеет формат ХХХ-ХХ или ХХХХХ"
     puts 'Введите номер поезда:'
     number = gets.chomp.upcase
     select_train_type.new number
@@ -91,8 +91,10 @@ module TrainGUI
     selected_train_info unless @selected_train.nil?
     puts 'Выберите действие: '
     menu1
-    menu2 unless @selected_train.nil?
-    menu3 unless @selected_train.route.nil?
+    unless @selected_train.nil?
+      menu2
+      menu3 unless @selected_train.route.nil?
+    end
     puts '100.Выход в главное меню'
     gets.chomp.to_i
   end

@@ -2,7 +2,7 @@ require_relative 'instance_counter'
 class Route
   @@routes = []
   include InstanceCounter
-  attr_accessor :stations
+  attr_accessor :stations, :first_station, :last_station
 
   def self.all
     @@routes

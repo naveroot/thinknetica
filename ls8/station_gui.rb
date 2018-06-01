@@ -8,9 +8,8 @@ module StationGUI
   end
 
   def passenger_trains_info
-    puts 'Из них пассажирских: ' + @selected_station.trains.select do |train|
-      train.is_a? PassengerTrain
-    end.size.to_s
+    passenger_trains = @selected_station.trains.select {|train| train.is_a? PassengerTrain}.size.to_s
+    puts 'Из них пассажирских: ' + passenger_trains
   end
 
   def cargo_trains_info
@@ -23,7 +22,7 @@ module StationGUI
   def trains_list_info
     puts 'Список поездов: '
     @selected_station.each_train_on_station do |train|
-      puts "#{train.number} #{train.type} #{train.wagons}"
+      puts "#{train.number} #{train.type} #{train.wagons.size}"
     end
   end
 
