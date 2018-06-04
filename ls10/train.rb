@@ -1,13 +1,24 @@
 require_relative 'vendor_info'
 require_relative 'instance_counter'
+require_relative 'accessors'
+require_relative 'validation'
 
 class Train
-  @@trains = []
-  REGEXP_VALIDATE = /^(\w|\d){3}-?(\w|\d){2}$/
+  extend Accessors
+  include Validation
   include VendorInfo
   include InstanceCounter
   attr_reader :wagons, :speed, :route, :number
 
+  attr_accessor_with_history :speed
+  strong_attr_accessor :number, String
+
+  @@trains = []
+  REGEXP_VALIDATE = /^(\w|\d){3}-?(\w|\d){2}$/
+
+  validate :number, :format, REGEXP_VALIDATE
+  validate :number, :type, String
+  validate :number, :presence
   def self.all
     @@trains
   end
@@ -92,19 +103,19 @@ class Train
     @wagons.delete_at(-1)
   end
 
-  def valid?
-    validate!
-  rescue StandardError
-    false
-  end
+  # def valid?
+  #   validate!
+  # rescue StandardError
+  #   false
+  # end
 
   protected
 
-  def validate!
-    raise 'Поезд с таким номером уже существует' if @@trains.map(&:number).include?(number)
-    raise 'Номер поезда не соответствует заданным параметрам' if number !~ REGEXP_VALIDATE
-    true
-  end
+  # def validate!
+  #   raise 'Поезд с таким номером уже существует' if @@trains.map(&:number).include?(number)
+  #   raise 'Номер поезда не соответствует заданным параметрам' if number !~ REGEXP_VALIDATE
+  #   true
+  # end
 
   def train_created
     puts "Поезд типа #{self.class} под номером #{@number} успешно добавлен"

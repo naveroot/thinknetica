@@ -1,9 +1,13 @@
 require_relative 'instance_counter'
 class Station
   include InstanceCounter
-  @@stations = []
-  attr_accessor :trains, :name
+  extend Accessors
+  include Validation
 
+  @@stations = []
+  attr_accessor_with_history :trains, :name
+
+  validate :name, :presence
   def initialize(name)
     @name = name
     @trains = []
@@ -32,19 +36,19 @@ class Station
     raise 'Этого поезда нет на станции' unless @trains.include? train
     @trains.delete(train)
   end
-
-  def valid?
-    validate!
-  rescue StandardError
-    false
-  end
+  #
+  # def valid?
+  #   validate!
+  # rescue StandardError
+  #   false
+  # end
 
   protected
 
-  def validate!
-    raise 'name должно быть строкой' unless name.is_a? String
-    raise 'Название не может быть пустым' if name == ''
-    raise 'Станция с таким названием уже создана' if @@stations.map(&:name).include?(name)
-    true
-  end
+  # def validate!
+  #   raise 'name должно быть строкой' unless name.is_a? String
+  #   raise 'Название не может быть пустым' if name == ''
+  #   raise 'Станция с таким названием уже создана' if @@stations.map(&:name).include?(name)
+  #   true
+  # end
 end

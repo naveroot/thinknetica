@@ -13,7 +13,8 @@ require_relative 'station_gui'
 require_relative 'vendor_info'
 require_relative 'instance_counter'
 require_relative 'wagon_gui'
-
+require_relative 'accessors'
+require_relative 'validation'
 class LessonOOP
   include InterfaceGUI
 
