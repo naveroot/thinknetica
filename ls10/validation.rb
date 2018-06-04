@@ -26,11 +26,6 @@ module Validation
       true
     end
 
-    def validate_presence(name, *_args)
-      val_name = instance_variable_get name.to_s
-      raise "#{name} не может быть пустым" if val_name.nil? || val_name == ''
-    end
-
     def valid?
       validate!
     rescue StandardError
@@ -38,6 +33,11 @@ module Validation
     end
 
     protected
+
+    def validate_presence(name, *_args)
+      val_name = instance_variable_get name.to_s
+      raise "#{name} не может быть пустым" if val_name.nil? || val_name == ''
+    end
 
     def validate_type(name, type, *_args)
       val_name = instance_variable_get name.to_s
