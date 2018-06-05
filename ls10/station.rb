@@ -1,4 +1,7 @@
 require_relative 'instance_counter'
+require_relative 'accessors'
+require_relative 'validation'
+
 class Station
   include InstanceCounter
   extend Accessors
