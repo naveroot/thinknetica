@@ -39,15 +39,15 @@ class Station
     raise 'Этого поезда нет на станции' unless @trains.include? train
     @trains.delete(train)
   end
-  #
+
   # def valid?
   #   validate!
   # rescue StandardError
   #   false
   # end
-
-  protected
-
+  #
+  # protected
+  #
   # def validate!
   #   raise 'name должно быть строкой' unless name.is_a? String
   #   raise 'Название не может быть пустым' if name == ''
